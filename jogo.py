@@ -1,6 +1,6 @@
 import pygame
 import os
-import random
+import sys
 
 TELA_LARGURA = 500
 TELA_ALTURA = 800
@@ -29,11 +29,9 @@ class Laser:
         self.direcao = 1
         self.tempo = 0
         self.laser_color = (255, 0, 0)  # Cor vermelha
-        self.laser_width = 5
-        self.laser_height = 10
-        self.laser_x = self.WIDTH
-        self.laser_y = self.HEIGHT
+        self.line_end_pos = [100,300]
         self.laser_speed_y = 5
+        self.line_growth_speed = 5
         
     def inverter(self):
         self.direcao *= -1
@@ -45,4 +43,32 @@ class Laser:
     
     def desenhar(self, tela):
         #chegamos na parte de descobrir como desenhar algo pra sempre em python
+        pass
+    
+def main():
+    laser = Laser(100, 300)
+    screen = pygame.display.set_mode((TELA_LARGURA, TELA_ALTURA))
+    clock = pygame.time.Clock()
+    FPS = 60
+    running = True
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+            if event.type == pygame.KEYDOWN:
+                if event.type == pygame.K_SPACE:
+                    laser.inverter()
+        laser.line_end_pos += laser.line_growth_speed
         
+        screen.fill((0,0,0))
+        
+        pygame.draw.line(screen, laser.line_color, (laser.x, laser.y), laser.line_end_pos,2)
+    
+        pygame.display.flip()
+        clock.tick(FPS)
+        
+    pygame.quit()
+    sys.exit()
+    
+if __name__ == '__main__':
+    main()
